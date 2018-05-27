@@ -30,7 +30,8 @@ def tags_to_entities(tags):
             continue
         elif tag.startswith('I'):
             if start is None:
-                raise ValueError(Errors.E067.format(tags=tags[:i]))
+                print(ValueError(Errors.E067.format(tags=tags[:i])))
+                #raise ValueError(Errors.E067.format(tags=tags[:i]))
             continue
         if tag.startswith('U'):
             entities.append((tag[2:], i, i))
@@ -40,7 +41,9 @@ def tags_to_entities(tags):
             entities.append((tag[2:], start, i))
             start = None
         else:
-            raise ValueError(Errors.E068.format(tag=tag))
+            #raise ValueError(Errors.E068.format(tag=tag))
+            print(Errors.E068.format(tag=tag))
+            #continue;
     return entities
 
 

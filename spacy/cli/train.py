@@ -1,6 +1,7 @@
 # coding: utf8
 from __future__ import unicode_literals, division, print_function
 
+import time
 import plac
 from pathlib import Path
 import tqdm
@@ -92,6 +93,7 @@ def train(lang, output_dir, train_data, dev_data, n_iter=30, n_sents=0,
     lang_class = util.get_lang_class(lang)
     nlp = lang_class()
     meta['pipeline'] = pipeline
+
     nlp.meta.update(meta)
     if vectors:
         print("Load vectors model", vectors)
@@ -115,12 +117,14 @@ def train(lang, output_dir, train_data, dev_data, n_iter=30, n_sents=0,
             nlp.entity.add_multitask_objective(objective)
     optimizer = nlp.begin_training(lambda: corpus.train_tuples, device=use_gpu)
     nlp._optimizer = None
-
+    #time.sleep(60)
     print("Itn.\tP.Loss\tN.Loss\tUAS\tNER P.\tNER R.\tNER F.\tTag %\tToken %")
     try:
         train_docs = corpus.train_docs(nlp, projectivize=True, noise_level=0.0,
                                        gold_preproc=gold_preproc, max_length=0)
+
         train_docs = list(train_docs)
+        print("train docs length ", len(train_docs))
         for i in range(n_iter):
             with tqdm.tqdm(total=n_train_words, leave=False) as pbar:
                 losses = {}
